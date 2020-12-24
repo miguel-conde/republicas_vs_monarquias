@@ -2,13 +2,14 @@ library(tidyverse)
 
 library(readr)
 
-rep_mon <- read_delim("data/rep_mon.csv", 
-                      ";", escape_double = FALSE, trim_ws = TRUE)
+rep_mon <- data.table::fread("data/rep_mon.csv",dec = ",")
+
+vars_clust <- c("score", "const_form", "int_dollars", "gini_index", "score_ief")
 
 scaled_rep_mon <- rep_mon %>% 
-  select(score, const_form, int_dollars, gini_index) %>% 
+  select(all_of(vars_clust)) %>% 
   mutate(const_form = as.numeric(factor(const_form))) %>% 
-  mutate_if(is.numeric, ~ scale(.))
+  mutate_if(is.numeric, ~ as.numeric(scale(.)))
 
 km_clust <- kmeans(scaled_rep_mon, centers = 4)
 
@@ -132,4 +133,4 @@ heatmap(scaled_rep_mon %>% as.matrix(),
 library(cluster)
 
 clusplot(scaled_rep_mon, km_clust$cluster, color=TRUE, shade=TRUE)
-
+clusplot(scaled_rep_mon, clust, color=TRUE, shade=TRUE)

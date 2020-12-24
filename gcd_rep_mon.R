@@ -115,7 +115,7 @@ spans <- temp %>%
 
 xml_remove(spans)
 
-gini <- html_table(temp[4], fill = TRUE)[[1]] %>% 
+gini <- html_table(temp[3], fill = TRUE)[[1]] %>% 
   janitor::clean_names() %>% 
   select(country, world_bank_gini_4) %>% 
   tail(-1) %>% 
@@ -126,6 +126,24 @@ gini <- gini %>%
   mutate(country_code = countryname(country, destination = 'iso3c'))
 
 # Freedom Index -----------------------------------------------------------
+
+url <- "https://en.wikipedia.org/wiki/Index_of_Economic_Freedom"
+
+temp <- url %>% 
+  html %>%
+  html_nodes("table")
+
+spans <- temp %>% 
+  html_nodes(xpath = "//*/tr/td/span")
+
+xml_remove(spans)
+
+ief <- html_table(temp[1], fill = TRUE)[[1]] %>% 
+  janitor::clean_names() %>% 
+  mutate(country = country_26,
+         score_ief = score) %>% 
+  select(country, score_ief) %>% 
+  mutate(country_code = countryname(country, destination = 'iso3c'))
 
 # Population --------------------------------------------------------------
 
@@ -164,9 +182,10 @@ all_data <- DI_2019 %>%
   full_join(PPA_FMI_2019, by = "country_code") %>% 
   full_join(rep_mon, by = "country_code") %>% 
   full_join(gini, by = "country_code") %>%
-  full_join(pop, by = "country_code") %>%
+  full_join(pop, by = "country_code")  %>%
+  full_join(ief, by = "country_code")%>%
   select(country_code, score, regime_type, const_form, int_dollars, 
-         gini_index,
+         gini_index, score_ief,
          pop,
          region) %>% 
   drop_na() %>% 
