@@ -196,7 +196,12 @@ all_data <- DI_2019 %>%
   mutate(const_form = ifelse(const_form == "Republic", 
                              "republic", const_form)) %>% 
   filter(const_form != "n/a") %>% 
-  mutate(const_form = factor(const_form))
+  mutate(const_form = factor(const_form),
+         regime_type = factor(regime_type, 
+                              levels = c("Authoritarian", "Hybrid regime",
+                                         "Flawed democracy", "Full democracy"),
+                              ordered = TRUE),
+         region = factor(region))
 
 write.csv2(all_data, here::here("data", "rep_mon.csv"), row.names = FALSE)
 

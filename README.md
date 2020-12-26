@@ -7,3 +7,4 @@
 + Income Equality (Gini Index): https://en.wikipedia.org/wiki/List_of_countries_by_income_equality
 + Population: https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population
 + Systems Of Government: https://en.wikipedia.org/wiki/List_of_countries_by_system_of_government
++ Freedom Index: https://en.wikipedia.org/wiki/Index_of_Economic_Freedom
