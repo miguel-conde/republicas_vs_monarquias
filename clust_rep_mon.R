@@ -22,10 +22,18 @@ kmean_withinss <- function(in_data, k) {
   return (cluster$tot.withinss)
 }
 
-plot(2:20, sapply(2:20, function(x) kmean_withinss(scaled_rep_mon, x)),
-     type = "o")
+aux <- sapply(1:1000, 
+              function(n) sapply(2:20, 
+                                 function(x) kmean_withinss(scaled_rep_mon, x)))
+aux_mean <- aux %>% rowMeans()
+aux_sd <- aux %>% apply(1, sd)
 
-km_clust <- kmeans(scaled_rep_mon, centers = 10)
+plot(2:20, aux_mean, type = "o")
+lines(2:20, aux_mean + 1.96 * aux_sd, lty = 2)
+lines(2:20, aux_mean - 1.96 * aux_sd, lty = 2)
+
+
+km_clust <- kmeans(scaled_rep_mon, centers = 8)
 
 res <- tibble(clust = km_clust$cluster) %>% 
   bind_cols(rep_mon)
@@ -45,6 +53,7 @@ boxplot(score ~ clust, res)
 boxplot(const_form ~ clust, res)
 boxplot(int_dollars ~ clust, res)
 boxplot(gini_index ~ clust, res)
+boxplot(score_ief ~ clust, res)
 
 barplot(t(km_clust$centers), beside = TRUE,xlab="cluster", ylab="value")
 legend("topleft", legend = colnames(km_clust$centers), bty = "n")

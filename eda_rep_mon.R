@@ -60,6 +60,10 @@ coef(hlm_wealthness)
 fixef(hlm_wealthness)
 ranef(hlm_wealthness)
 
+plot(all_data$int_dollars, fitted(hlm_wealthness))
+abline(a = 0, b = 1)
+Metrics::mape(all_data$int_dollars, fitted(hlm_wealthness))
+
 nlm_wealthness <- lmer(int_dollars ~ score_ief + gini_index - 1 +
                          (score_ief + gini_index | const_form/regime_type), 
                        all_data)
@@ -67,6 +71,10 @@ summary(nlm_wealthness)
 coef(nlm_wealthness)
 fixef(nlm_wealthness)
 ranef(nlm_wealthness)
+
+plot(all_data$int_dollars, fitted(nlm_wealthness))
+abline(a = 0, b = 1)
+Metrics::mape(all_data$int_dollars, fitted(nlm_wealthness))
 
 hlm_equality <- lmer(gini_index ~ score_ief + int_dollars - 1 +
                          (score_ief + int_dollars  | const_form) +
@@ -77,6 +85,10 @@ coef(hlm_equality)
 fixef(hlm_equality)
 ranef(hlm_equality)
 
+plot(all_data$gini_index, fitted(hlm_equality))
+abline(a = 0, b = 1)
+Metrics::mape(all_data$gini_index, fitted(hlm_equality))
+
 nlm_equality <- lmer(gini_index ~ score_ief + int_dollars - 1 +
                          (score_ief + int_dollars | const_form/regime_type), 
                        all_data)
@@ -84,3 +96,7 @@ summary(nlm_equality)
 coef(nlm_equality)
 fixef(nlm_equality)
 ranef(nlm_equality)
+
+plot(all_data$gini_index, fitted(nlm_equality))
+abline(a = 0, b = 1)
+Metrics::mape(all_data$gini_index, fitted(nlm_equality))
